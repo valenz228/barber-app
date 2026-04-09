@@ -1,5 +1,4 @@
 const API_URL =
-  import.meta.env.VITE_GOOGLE_SHEETS_API_URL ||
   "https://script.google.com/macros/s/AKfycbyba7Oe_OigVHCCfn3I5C_JE8kMLfgMeWpCJBDwbpykvqAqk5kdJ5KNWR_Z1b-kcj9hOg/exec";
 
 function normalizeTable(table = []) {
