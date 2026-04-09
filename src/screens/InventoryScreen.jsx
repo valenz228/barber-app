@@ -6,11 +6,6 @@ const TYPE_LABELS = {
   product: "Producto",
 };
 
-const INVENTORY_GROUPS = [
-  { key: "service", title: "Servicios" },
-  { key: "product", title: "Productos" },
-];
-
 const INITIAL_FORM = {
   editingId: "",
   name: "",
@@ -46,12 +41,10 @@ export function InventoryScreen({
 }) {
   const [form, setForm] = useState(INITIAL_FORM);
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [category, setCategory] = useState("service");
 
   const sortedItems = [...inventory].sort((a, b) => a.name.localeCompare(b.name, "es"));
-  const groupedItems = INVENTORY_GROUPS.map((group) => ({
-    ...group,
-    items: sortedItems.filter((item) => item.type === group.key),
-  }));
+  const visibleItems = sortedItems.filter((item) => item.type === category);
   const isEditing = Boolean(form.editingId);
   const totalValue = Number(form.totalPrice || 0);
   const barberValue = Number(form.barberShare || 0);
@@ -120,6 +113,21 @@ export function InventoryScreen({
           {isEditing ? "Cancelar" : isFormVisible ? "Cerrar" : "+ Anadir"}
         </button>
       </div>
+
+      <section className="section-block">
+        <div className="segmented-control" role="tablist" aria-label="Tipo de inventario">
+          {Object.entries(TYPE_LABELS).map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              className={`segment ${category === key ? "active" : ""}`}
+              onClick={() => setCategory(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </section>
 
       <div
         style={{
@@ -223,69 +231,58 @@ export function InventoryScreen({
       </div>
 
       <div className="section-heading section-heading-spaced">
-        <h2>Items disponibles</h2>
-        <span>Editar o eliminar</span>
+        <h2>{TYPE_LABELS[category]}</h2>
+        <span>{visibleItems.length} items</span>
       </div>
 
       <div className="stack-list">
-        {groupedItems.map((group) =>
-          group.items.length > 0 ? (
-            <div key={group.key} className="stack-list">
-              <div className="section-heading">
-                <h2>{group.title}</h2>
-                <span>{group.items.length} items</span>
+        {visibleItems.map((item) => (
+          <article key={`${item.type}-${item.name}`} className="info-card info-card-tall">
+            <div className="inventory-item-button">
+              <div className="register-grid">
+                <div>
+                  <strong>{item.name}</strong>
+                  <p>{TYPE_LABELS[item.type] || item.type}</p>
+                </div>
+                <div className="register-meta">
+                  <strong className="accent-amount">{formatMoney(item.totalPrice)}</strong>
+                  <p>
+                    {formatMoney(item.barberShare)} / {formatMoney(item.shopShare)}
+                  </p>
+                </div>
               </div>
-
-              {group.items.map((item) => (
-                <article key={`${item.type}-${item.name}`} className="info-card info-card-tall">
-                  <div className="inventory-item-button">
-                    <div className="register-grid">
-                      <div>
-                        <strong>{item.name}</strong>
-                        <p>{TYPE_LABELS[item.type] || item.type}</p>
-                      </div>
-                      <div className="register-meta">
-                        <strong className="accent-amount">{formatMoney(item.totalPrice)}</strong>
-                        <p>
-                          {formatMoney(item.barberShare)} / {formatMoney(item.shopShare)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="action-row">
-                    <span className="helper-copy">
-                      {item.name === form.editingId ? "Editando" : ""}
-                    </span>
-                    <div className="inline-actions">
-                      <button
-                        type="button"
-                        className="ghost-action"
-                        onClick={() => {
-                          setForm(getFormFromItem(item));
-                          setIsFormVisible(true);
-                        }}
-                      >
-                        Editar
-                      </button>
-                      <button
-                        type="button"
-                        className="danger-button subtle"
-                        onClick={() => onDeleteItem(item)}
-                        disabled={deletingInventoryName === item.name}
-                      >
-                        {deletingInventoryName === item.name ? "Eliminando..." : "Eliminar"}
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              ))}
             </div>
-          ) : null,
-        )}
 
-        {!loading && sortedItems.length === 0 ? (
-          <div className="empty-state">No hay productos o servicios en Google Sheets.</div>
+            <div className="action-row">
+              <span className="helper-copy">{item.name === form.editingId ? "Editando" : ""}</span>
+              <div className="inline-actions">
+                <button
+                  type="button"
+                  className="ghost-action"
+                  onClick={() => {
+                    setForm(getFormFromItem(item));
+                    setIsFormVisible(true);
+                  }}
+                >
+                  Editar
+                </button>
+                <button
+                  type="button"
+                  className="danger-button subtle"
+                  onClick={() => onDeleteItem(item)}
+                  disabled={deletingInventoryName === item.name}
+                >
+                  {deletingInventoryName === item.name ? "Eliminando..." : "Eliminar"}
+                </button>
+              </div>
+            </div>
+          </article>
+        ))}
+
+        {!loading && visibleItems.length === 0 ? (
+          <div className="empty-state">
+            No hay {TYPE_LABELS[category].toLowerCase()}s cargados en Google Sheets.
+          </div>
         ) : null}
       </div>
     </section>
