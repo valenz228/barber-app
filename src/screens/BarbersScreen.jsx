@@ -205,7 +205,62 @@ export function BarbersScreen({
             key={barber.name}
             className="info-card info-card-tall clickable-card"
             onClick={() => setSelectedBarber(barber)}
+            style={{ position: "relative" }}
           >
+            <div
+              style={{
+                position: "absolute",
+                top: 12,
+                right: 12,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                zIndex: 1,
+              }}
+            >
+              <button
+                type="button"
+                aria-label={`Editar ${barber.name}`}
+                title="Editar"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setForm(getFormFromBarber(barber));
+                }}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  padding: 2,
+                  fontSize: "0.95rem",
+                  lineHeight: 1,
+                  cursor: "pointer",
+                  opacity: 0.7,
+                }}
+              >
+                ✏️
+              </button>
+              <button
+                type="button"
+                aria-label={`Eliminar ${barber.name}`}
+                title="Eliminar"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDeleteBarber(barber);
+                }}
+                disabled={deletingBarberName === barber.name}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  padding: 2,
+                  fontSize: "0.95rem",
+                  lineHeight: 1,
+                  cursor: deletingBarberName === barber.name ? "wait" : "pointer",
+                  opacity: deletingBarberName === barber.name ? 0.45 : 0.7,
+                }}
+              >
+                🗑️
+              </button>
+            </div>
+
             <div className="profile-block">
               <span className="chip-avatar profile-avatar">
                 {barber.photo ? (
@@ -218,33 +273,7 @@ export function BarbersScreen({
               <div>
                 <strong>{barber.name}</strong>
                 <p>{barber.photo ? "Con foto" : "Sin foto"}</p>
-              </div>
-            </div>
-
-            <div className="action-row">
-              <span className="helper-copy">{barber.name === form.editingId ? "Editando" : ""}</span>
-              <div className="inline-actions">
-                <button
-                  type="button"
-                  className="ghost-action"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setForm(getFormFromBarber(barber));
-                  }}
-                >
-                  Editar
-                </button>
-                <button
-                  type="button"
-                  className="danger-button subtle"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onDeleteBarber(barber);
-                  }}
-                  disabled={deletingBarberName === barber.name}
-                >
-                  {deletingBarberName === barber.name ? "Eliminando..." : "Eliminar"}
-                </button>
+                {barber.name === form.editingId ? <p className="helper-copy">Editando</p> : null}
               </div>
             </div>
           </article>
