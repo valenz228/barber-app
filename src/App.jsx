@@ -412,11 +412,11 @@ function App() {
               onEditSale={handleStartEditSale}
             />
           ) : null}
-        </section>
 
-        <footer className="bottom-dock">
           <div className="status-stack" aria-live="polite">
-            {loading ? <p className="status-message">Cargando datos desde Google Sheets...</p> : null}
+            {loading ? (
+              <p className="status-message">Cargando datos desde Google Sheets...</p>
+            ) : null}
             {error ? <p className="status-message error">{error}</p> : null}
             {submitError ? <p className="status-message error">{submitError}</p> : null}
             {submitSuccess ? <p className="status-message success">{submitSuccess}</p> : null}
@@ -432,10 +432,12 @@ function App() {
               {submitting ? "Guardando..." : editingSaleId ? "Actualizar venta" : "Guardar venta"}
             </button>
           ) : null}
-
-          <TabBar tabs={TABS} currentTab={currentTab} onChange={setCurrentTab} />
-        </footer>
+        </section>
       </main>
+
+      <footer className="bottom-dock">
+        <TabBar tabs={TABS} currentTab={currentTab} onChange={setCurrentTab} />
+      </footer>
     </div>
   );
 }

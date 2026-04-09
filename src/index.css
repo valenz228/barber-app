@@ -1,13 +1,13 @@
 :root {
-  --color-primary: #000814;
-  --color-accent: #ffc300;
-  --color-bg: #ffffff;
-  --color-surface: #ffffff;
-  --color-surface-soft: #f7f8fa;
-  --color-text: #000814;
-  --color-text-muted: #586273;
-  --color-border: rgba(0, 8, 20, 0.12);
-  --color-shadow: rgba(0, 8, 20, 0.08);
+  --color-primary: #f4efe6;
+  --color-accent: #ffb703;
+  --color-bg: #0f1115;
+  --color-surface: #171a21;
+  --color-surface-soft: #222733;
+  --color-text: #f5f7fb;
+  --color-text-muted: #9aa4b2;
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-shadow: rgba(0, 0, 0, 0.35);
   font-family:
     "SF Pro Display",
     "SF Pro Text",
@@ -27,8 +27,10 @@
   box-sizing: border-box;
 }
 
-html {
-  min-height: 100%;
+html,
+body {
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -51,7 +53,8 @@ img {
 }
 
 #root {
-  min-height: 100svh;
+  height: 100svh;
+  overflow: hidden;
 }
 
 h1,
