@@ -230,9 +230,13 @@ export async function deleteInventoryItem(payload) {
   });
 }
 
-export async function resetMonthlyData() {
+export async function clearAllSales() {
   return sendRequest("POST", {
-    action: "resetMonthlyData",
-    sheets: ["Ventas", "Inventario", "Barberos"],
+    action: "clearAllSales",
+    sheet: "Ventas",
   });
+}
+
+export async function resetMonthlyData() {
+  return clearAllSales();
 }

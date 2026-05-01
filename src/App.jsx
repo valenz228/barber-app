@@ -142,13 +142,8 @@ function App() {
     setQuantity(1);
   }
 
-  function clearLocalData() {
-    setInventory([]);
-    setBarbers([]);
+  function clearLocalSales() {
     setSales([]);
-    setSelectedBarber("");
-    setSelectedItem("");
-    setCategory("service");
     resetSalesSelection();
   }
 
@@ -367,8 +362,8 @@ function App() {
 
     try {
       await resetMonthlyData();
-      clearLocalData();
-      setSubmitSuccess("Base de datos reiniciada para el nuevo mes.");
+      clearLocalSales();
+      setSubmitSuccess("Ventas borradas correctamente.");
     } catch (resetError) {
       setSubmitError(getErrorMessage(resetError));
     } finally {
