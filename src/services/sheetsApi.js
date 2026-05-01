@@ -231,11 +231,9 @@ export async function deleteInventoryItem(payload) {
 }
 
 export async function clearAllSales() {
-  const response = await fetch(API_URL, {
+  await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    mode: "no-cors",
     body: JSON.stringify({
       action: "clear",
       sheet: "Ventas",
@@ -243,15 +241,12 @@ export async function clearAllSales() {
     cache: "no-store",
   });
 
-  const data = await response.json();
+  console.log("[GoogleSheets] clearAllSales request sent", {
+    action: "clear",
+    sheet: "Ventas",
+  });
 
-  console.log("[GoogleSheets] clearAllSales response", data);
-
-  if (!response.ok || data?.ok === false) {
-    throw new Error(data?.error || "No se pudieron borrar las ventas en Google Sheets.");
-  }
-
-  return data;
+  return { ok: true };
 }
 
 export async function resetMonthlyData() {

@@ -344,32 +344,20 @@ function App() {
     }
   }
 
-  async function handleResetMonthlyData() {
-    if (resettingMonthlyData) {
-      return;
-    }
+  const handleReset = async () => {
+    console.log("CLICK RESET");
 
-    const isConfirmed = window.confirm(
-      "¿Seguro que quieres borrar todos los registros? Esta acción no se puede deshacer.",
-    );
-
-    if (!isConfirmed) {
-      return;
-    }
-
-    clearFeedback();
-    setResettingMonthlyData(true);
+    const ok = window.confirm("¿Borrar todo?");
+    if (!ok) return;
 
     try {
       await resetMonthlyData();
-      clearLocalSales();
-      setSubmitSuccess("Ventas borradas correctamente.");
-    } catch (resetError) {
-      setSubmitError(getErrorMessage(resetError));
-    } finally {
-      setResettingMonthlyData(false);
+      console.log("RESET ENVIADO");
+      alert("Reset enviado");
+    } catch (error) {
+      console.error("ERROR RESET:", error);
     }
-  }
+  };
 
   const salesScreenProps = {
     category,
@@ -450,7 +438,7 @@ function App() {
               resettingMonthlyData={resettingMonthlyData}
               onDeleteSale={handleDeleteSale}
               onEditSale={handleStartEditSale}
-              onResetMonthlyData={handleResetMonthlyData}
+              onResetMonthlyData={handleReset}
             />
           ) : null}
 
@@ -473,6 +461,7 @@ function App() {
               {submitting ? "Guardando..." : editingSaleId ? "Actualizar venta" : "Guardar venta"}
             </button>
           ) : null}
+          {currentTab === "register" ? <button onClick={handleReset}>Reset mensual</button> : null}
         </section>
       </main>
 
