@@ -9,8 +9,10 @@ export function RegisterScreen({
   sales,
   loading,
   deletingSaleKey,
+  resettingMonthlyData,
   onDeleteSale,
   onEditSale,
+  onResetMonthlyData,
 }) {
   const [selectedBarber, setSelectedBarber] = useState("all");
 
@@ -64,6 +66,24 @@ export function RegisterScreen({
             ))}
           </select>
         </label>
+      </div>
+
+      <div className="editor-card danger-zone-card">
+        <div className="section-heading">
+          <h2>Reset mensual</h2>
+        </div>
+        <p className="danger-copy">
+          Borra todas las ventas, servicios y barberos guardados en Google Sheets para empezar un
+          nuevo mes desde cero.
+        </p>
+        <button
+          type="button"
+          className="danger-button"
+          onClick={onResetMonthlyData}
+          disabled={loading || resettingMonthlyData}
+        >
+          {resettingMonthlyData ? "Borrando datos..." : "Borrar todos los registros"}
+        </button>
       </div>
 
       <div className="stack-list register-list-spaced">

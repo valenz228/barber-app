@@ -14,6 +14,7 @@ import {
   deleteSale,
   fetchSheetData,
   getErrorMessage,
+  resetMonthlyData,
   updateSale,
   updateBarber,
   updateInventoryItem,
@@ -43,6 +44,7 @@ function App() {
   const [deletingBarberName, setDeletingBarberName] = useState("");
   const [deletingInventoryName, setDeletingInventoryName] = useState("");
   const [deletingSaleKey, setDeletingSaleKey] = useState("");
+  const [resettingMonthlyData, setResettingMonthlyData] = useState(false);
 
   const [inventory, setInventory] = useState([]);
   const [barbers, setBarbers] = useState([]);
@@ -136,6 +138,16 @@ function App() {
     setEditingSaleDate("");
     setSelectedItem("");
     setQuantity(1);
+  }
+
+  function clearLocalData() {
+    setInventory([]);
+    setBarbers([]);
+    setSales([]);
+    setSelectedBarber("");
+    setSelectedItem("");
+    setCategory("service");
+    resetSalesSelection();
   }
 
   function buildSalePayload() {
@@ -335,6 +347,33 @@ function App() {
     }
   }
 
+  async function handleResetMonthlyData() {
+    if (resettingMonthlyData) {
+      return;
+    }
+
+    const isConfirmed = window.confirm(
+      "¿Seguro que quieres borrar todos los registros? Esta acción no se puede deshacer.",
+    );
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    clearFeedback();
+    setResettingMonthlyData(true);
+
+    try {
+      await resetMonthlyData();
+      clearLocalData();
+      setSubmitSuccess("Base de datos reiniciada para el nuevo mes.");
+    } catch (resetError) {
+      setSubmitError(getErrorMessage(resetError));
+    } finally {
+      setResettingMonthlyData(false);
+    }
+  }
+
   const salesScreenProps = {
     category,
     setCategory: (nextCategory) => {
@@ -408,8 +447,10 @@ function App() {
               sales={sales}
               loading={loading}
               deletingSaleKey={deletingSaleKey}
+              resettingMonthlyData={resettingMonthlyData}
               onDeleteSale={handleDeleteSale}
               onEditSale={handleStartEditSale}
+              onResetMonthlyData={handleResetMonthlyData}
             />
           ) : null}
 

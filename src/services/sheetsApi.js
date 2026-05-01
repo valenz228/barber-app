@@ -229,3 +229,10 @@ export async function deleteInventoryItem(payload) {
     id: payload.id,
   });
 }
+
+export async function resetMonthlyData() {
+  return sendRequest("POST", {
+    action: "resetMonthlyData",
+    sheets: ["Ventas", "Inventario", "Barberos"],
+  });
+}
