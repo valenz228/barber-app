@@ -1,6 +1,10 @@
 export function TabBar({ tabs, currentTab, onChange }) {
   return (
-    <nav className="tabbar" aria-label="Navegacion principal">
+    <nav
+      className="tabbar"
+      aria-label="Navegacion principal"
+      style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}
+    >
       {tabs.map((tab) => (
         <button
           key={tab.key}

@@ -5,6 +5,7 @@ import { BarbersScreen } from "./screens/BarbersScreen.jsx";
 import { InventoryScreen } from "./screens/InventoryScreen.jsx";
 import { RegisterScreen } from "./screens/RegisterScreen.jsx";
 import { SalesScreen } from "./screens/SalesScreen.jsx";
+import { SummaryScreen } from "./screens/SummaryScreen.jsx";
 import {
   addBarber,
   addInventoryItem,
@@ -22,6 +23,7 @@ import {
 
 const TABS = [
   { key: "sales", label: "Ventas", icon: "€" },
+  { key: "summary", label: "Resumen", icon: "▦" },
   { key: "inventory", label: "Inventario", icon: "▣" },
   { key: "barbers", label: "Barberos", icon: "✂" },
   { key: "register", label: "Registro", icon: "≡" },
@@ -419,6 +421,9 @@ function App() {
           </header>
 
           {currentTab === "sales" ? <SalesScreen {...salesScreenProps} /> : null}
+          {currentTab === "summary" ? (
+            <SummaryScreen sales={sales} barbers={barbers} loading={loading} />
+          ) : null}
           {currentTab === "inventory" ? (
             <InventoryScreen
               inventory={inventory}
